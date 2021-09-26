@@ -20,7 +20,13 @@ logging.getLogger('parso').setLevel(logging.WARNING)
 
 ### [To get your output, run it like this:](https://stackoverflow.com/a/57054297/8996974)
 
-`scrapy runspider tribun_articles.py -o tribun_articles.json`
+`scrapy runspider tribun_scraper/tribun_scraper/spiders/tribun_articles.py -O tribun_articles.json --nolog`
+
+Run in the debug mode using this:
+
+`scrapy runspider tribun_scraper/tribun_scraper/spiders/tribun_articles.py -O tribun_articles.json --logfile tribun-scraper.logs -L 'INFO'`
+
+I recommend using -O to overwrite any result from previous run **if the run was stopped** and manually trace and re-run from crawled urls
 
 ## Notes
 

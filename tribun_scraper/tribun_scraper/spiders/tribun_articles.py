@@ -77,9 +77,12 @@ class TribunArticlesSpider(scrapy.Spider):
         content = response.xpath('//div[contains(@class, "txt-article")]/p//text()').getall()
 
         if content:
-            item.update({
-                'content': item['content'].extend(content)
-            })
+            if item['content']:
+                item.update({
+                    'content': item['content'].extend(content)
+                })
+            else:
+                item['content'] = content
 
         # get article's next page again
         next_page = response.xpath('//div[@class="mb20"]/a/@href').extract_first()
