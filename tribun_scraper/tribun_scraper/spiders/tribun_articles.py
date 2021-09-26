@@ -1,27 +1,7 @@
+import logging
+
 import scrapy
 
-"""
-a = response.xpath('//a[contains(@href, "2021")]/@href').getall()
-article_links = list(filter(lambda title: len(title) > 70, a))
-
-# get index's next page
-next_page = response.xpath('//a[contains(text(), "Next")]/@href').extract_first()
-
-# get articles title
-response.xpath('//h1[@id="arttitle"]/text()').extract_first()
-
-# get articles published date
-response.xpath('//time[@class="grey"]/text()').extract_first()
-
-# get articles content
-response.xpath('//div[contains(@class, "txt-article")]/p//text()').getall()
-
-# get tagcloud
-response.xpath('//h5[@class="tagcloud3"]/a/text()').getall()
-
-# get article's next page
-next_page = response.xpath('//div[@class="mb20"]/a/@href').extract_first()
-"""
 
 class TribunArticlesSpider(scrapy.Spider):
     name = 'tribun.articles'
@@ -29,7 +9,7 @@ class TribunArticlesSpider(scrapy.Spider):
     # start_urls = get_urls()
     start_urls = [
         "https://www.tribunnews.com/index-news/news?date=2021-5-1",
-        "https://www.tribunnews.com/index-news/news?date=2021-5-2",
+        # "https://www.tribunnews.com/index-news/news?date=2021-5-2",
     ]
 
     def parse(self, response):
@@ -46,7 +26,8 @@ class TribunArticlesSpider(scrapy.Spider):
         # get index's next page
         next_page = response.xpath('//a[contains(text(), "Next")]/@href').extract_first()
         if next_page:
-            yield scrapy.Request(next_page)
+            logging.info(f'Processing: {next_page}')
+            yield response.follow(next_page, callback=self.parse)
             
 
     def parse_article_page(self, response):
@@ -66,7 +47,8 @@ class TribunArticlesSpider(scrapy.Spider):
         if next_page is None:
             yield item
         else:
-            yield scrapy.Request(
+            logging.info(f'Processing: {next_page}')
+            yield response.follow(
                 next_page,
                 callback=self.parse_article_next_page,
                 meta={'item': item}
@@ -90,7 +72,8 @@ class TribunArticlesSpider(scrapy.Spider):
         if next_page is None:
             yield item
         else:
-            yield scrapy.Request(
+            logging.info(f'Processing: {next_page}')
+            yield response.follow(
                 next_page,
                 callback=self.parse_article_next_page,
                 meta={'item': item}
