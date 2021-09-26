@@ -20,11 +20,7 @@ logging.getLogger('parso').setLevel(logging.WARNING)
 
 ### [To get your output, run it like this:](https://stackoverflow.com/a/57054297/8996974)
 
-`scrapy runspider tribun_scraper/tribun_scraper/spiders/tribun_articles.py -O tribun_articles.json --nolog`
-
-Run in the debug mode using this:
-
-`scrapy runspider tribun_scraper/tribun_scraper/spiders/tribun_articles.py -O tribun_articles.json --logfile tribun-scraper.logs -L 'INFO'`
+`scrapy crawl tribun.articles -O tribun_articles.json`
 
 I recommend using -O to overwrite any result from previous run **if the run was stopped** and manually trace and re-run from crawled urls
 
@@ -35,3 +31,5 @@ I recommend using -O to overwrite any result from previous run **if the run was 
 2. [Two classes](https://stackoverflow.com/a/3881148/8996974)
 3. [Absolute and relative paths](https://stackoverflow.com/a/35608304/8996974)
 4. [Delay Download](https://stackoverflow.com/a/30410408) (mine is 1s)
+5. [Don't use parse as callback because it's used internally](https://stackoverflow.com/a/32626667/8996974)
+6. USE [CRAWL](https://stackoverflow.com/a/42866157/8996974) LOL
