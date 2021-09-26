@@ -89,4 +89,5 @@ DOWNLOAD_DELAY = .5
 
 # Logging (there's too much output); __I added this__
 # https://docs.scrapy.org/en/latest/topics/settings.html#std-setting-LOG_LEVEL
+LOG_FILE = 'tribun-scraper.logs'
 LOG_LEVEL = 'ERROR'
