@@ -13,7 +13,11 @@ URLS = get_urls()
 
 def fetch(url):
 	page = requests.get(url)
-	time.sleep(1)
+	time.sleep(2)
+
+	if page.status_code == 404:
+		return None
+
 	return BeautifulSoup(page.content, 'html.parser')
 
 def get_by_day_article_links(url, index_soup):  # 2021-05-01, day = 01
@@ -100,6 +104,11 @@ def process_url(article_links):
 		logging.info(f"processing {article_link}")
 
 		article_soup = fetch(article_link)
+
+		# handle 404 error here
+		if article_soup is None:
+			continue
+
 		data = get_article_contents(article_soup)  # process articles
 		data['link'] = article_link
 
@@ -117,13 +126,17 @@ if __name__ == '__main__':
 		# process initial page
 		index_soup = fetch(url)
 		last_page = get_last_page(index_soup)  # OFFSET
+
+		"""
 		article_links = get_by_day_article_links(url, index_soup)
 
 		data = process_url(article_links)
 		dump_json(url, 1, data)
+		"""
 
 		# process subsequent pages
-		page = 2  # start from next page
+		# page = 2  # start from next page
+		page = 3
 		while page <= last_page:
 			page_url = url + f'&page={page}'
 
