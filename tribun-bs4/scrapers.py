@@ -86,7 +86,10 @@ def recurse_content(url, content):  # side effects
 		logging.info(f'going to {next_page_link}')
 		recurse_content(next_page_link, content)
 
-def dump_json(dump_path, data):
+def dump_json(url, page, data):
+	filename = url.split('date=')[-1] + f'-{page}.json'
+	dump_path = os.path.join(DUMP_PATH, filename)
+
 	with open(f'{dump_path}.json', 'w') as f:
 		json.dump(data, f)
 
@@ -105,8 +108,6 @@ def process_url(article_links):
 if __name__ == '__main__':
 	logging.basicConfig(level=logging.DEBUG, filename="tribun-bs4/tribun-bs4.logs", filemode="a+",
                         format="%(asctime)-15s %(levelname)-8s %(message)s")
-	dumps = []
-
 	# for url in URLS:
 	for url in ['https://www.tribunnews.com/index-news/news?date=2021-5-1']:
 		logging.info(f'processing: {url}')
@@ -117,7 +118,7 @@ if __name__ == '__main__':
 		article_links = get_by_day_article_links(url, index_soup)
 
 		data = process_url(article_links)
-		dumps.append(data)
+		dump_json(url, 1, data)
 
 		# process subsequent pages
 		page = 2  # start from next page
@@ -129,9 +130,7 @@ if __name__ == '__main__':
 			article_links = get_by_day_article_links(url, page_soup)
 			
 			data = process_url(article_links)
-			dumps.append(data)
+			dump_json(page_url, page, data)
+
+			page += 1
 		
-		# finish processing; dump
-		filename = url.split('date=')[-1] + '.json'
-		dump_path = os.path.join(DUMP_PATH, filename)
-		dump_json(dump_path, dumps)
