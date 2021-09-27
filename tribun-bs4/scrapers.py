@@ -87,7 +87,7 @@ def recurse_content(url, content):  # side effects
 	next_page_link, should_go = check_next_page(soup)
 
 	if should_go:
-		logging.info(f'going to {next_page_link}')
+		# logging.info(f'going to {next_page_link}')
 		recurse_content(next_page_link, content)
 
 def dump_json(url, page, data):
@@ -101,7 +101,7 @@ def process_url(article_links):
 	dump = []
 
 	for article_link in article_links:
-		logging.info(f"processing {article_link}")
+		# logging.info(f"processing {article_link}")
 
 		article_soup = fetch(article_link)
 
@@ -121,7 +121,7 @@ if __name__ == '__main__':
                         format="%(asctime)-15s %(levelname)-8s %(message)s")
 	# for url in URLS:
 	for url in ['https://www.tribunnews.com/index-news/news?date=2021-5-1']:
-		logging.info(f'processing: {url}')
+		# logging.info(f'processing: {url}')
 
 		# process initial page
 		index_soup = fetch(url)
@@ -140,7 +140,7 @@ if __name__ == '__main__':
 		while page <= last_page:
 			page_url = url + f'&page={page}'
 
-			logging.info(f'processing: {page_url}')
+			# logging.info(f'processing: {page_url}')
 			page_soup = fetch(page_url)
 			article_links = get_by_day_article_links(url, page_soup)
 			
