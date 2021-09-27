@@ -106,6 +106,8 @@ if __name__ == '__main__':
 
 	# for url in URLS:
 	for url in ['https://www.tribunnews.com/index-news/news?date=2021-5-1']:
+		print(f'processing: {url}')
+
 		# process initial page
 		index_soup = fetch(url)
 		last_page = get_last_page(index_soup)  # OFFSET
@@ -117,6 +119,8 @@ if __name__ == '__main__':
 		# process subsequent pages
 		page = 2  # start from next page
 		while page <= last_page:
+			print(f'processing: {page_url}')
+
 			page_url = url + f'&page={page}'
 			page_soup = fetch(page_url)
 			article_links = get_by_day_article_links(url, page_soup)
