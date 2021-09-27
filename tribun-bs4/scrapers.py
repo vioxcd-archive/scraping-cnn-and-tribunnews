@@ -16,7 +16,7 @@ def fetch(url):
 	time.sleep(2)
 
 	if page.status_code == 404:
-		return None
+		raise requests.HTTPError
 
 	return BeautifulSoup(page.content, 'html.parser')
 
@@ -103,15 +103,14 @@ def process_url(article_links):
 	for article_link in article_links:
 		# logging.info(f"processing {article_link}")
 
-		article_soup = fetch(article_link)
-
-		# handle 404 error here
-		if article_soup is None:
+		# get_article_contents calls fetch() and might break.
+		try:
+			article_soup = fetch(article_link)
+			data = get_article_contents(article_soup) 
+		except requests.HTTPError as e:
 			continue
 
-		data = get_article_contents(article_soup)  # process articles
 		data['link'] = article_link
-
 		dump.append(data)
 
 	return dump
