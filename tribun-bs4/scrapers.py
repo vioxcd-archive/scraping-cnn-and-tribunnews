@@ -103,7 +103,7 @@ def process_url(article_links):
 	return data
 
 if __name__ == '__main__':
-	logging.basicConfig(level=logging.DEBUG, filename="tribun-bs4.logs", filemode="a+",
+	logging.basicConfig(level=logging.DEBUG, filename="tribun-bs4/tribun-bs4.logs", filemode="a+",
                         format="%(asctime)-15s %(levelname)-8s %(message)s")
 	dumps = []
 
@@ -122,9 +122,9 @@ if __name__ == '__main__':
 		# process subsequent pages
 		page = 2  # start from next page
 		while page <= last_page:
-			logging.info(f'processing: {page_url}')
-
 			page_url = url + f'&page={page}'
+
+			logging.info(f'processing: {page_url}')
 			page_soup = fetch(page_url)
 			article_links = get_by_day_article_links(url, page_soup)
 			
