@@ -3,4 +3,5 @@ dump/
 *__pycache__*
 *.logs
 *.json
-*.txt
+tribun-*.txt
+cnn-*.txt
