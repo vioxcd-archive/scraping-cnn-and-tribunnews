@@ -1,4 +1,5 @@
 import json
+import os
 import time
 
 import requests
@@ -6,6 +7,7 @@ from bs4 import BeautifulSoup
 
 from urls import get_urls
 
+DUMP_PATH = f'{os.getcwd()}/dump'
 URLS = get_urls()
 
 def fetch(url):
@@ -46,7 +48,7 @@ def get_article_contents(article_soup):
 	next_page_link, should_go = check_next_page(article_soup)
 
 	if should_go:
-		print(f'going to {next_page_link}')
+		# print(f'going to {next_page_link}')
 		recurse_content(next_page_link, content)
 	
 	return {
@@ -80,34 +82,49 @@ def recurse_content(url, content):  # side effects
 	next_page_link, should_go = check_next_page(soup)
 
 	if should_go:
-		print(f'going to {next_page_link}')
+		# print(f'going to {next_page_link}')
 		recurse_content(next_page_link, content)
 
+def dump_json(dump_path, data):
+	with open(f'{dump_path}.json', 'w') as f:
+		json.dump(data, f)
+
+def process_url(article_links):
+	data = []
+
+	for article_link in article_links:
+		# print(f"processing {article_link}")
+
+		article_soup = fetch(article_link)
+		data = get_article_contents(article_soup)  # process articles
+		data['link'] = article_link
+
+	return data
 
 if __name__ == '__main__':
 	dumps = []
 
 	# for url in URLS:
-	for url in ["https://www.tribunnews.com/index-news/news?date=2021-5-1"]:
+	for url in ['https://www.tribunnews.com/index-news/news?date=2021-5-1']:
+		# process initial page
 		index_soup = fetch(url)
 		last_page = get_last_page(index_soup)  # OFFSET
 		article_links = get_by_day_article_links(url, index_soup)
 
-		# process current page
-		for article_link in article_links:
-			print(f"processing {article_link}")
+		data = process_url(article_links)
+		dumps.append(data)
 
-			article_soup = fetch(article_link)
-			data = get_article_contents(article_soup)
-			data['link'] = article_link
-
+		# process subsequent pages
+		page = 2  # start from next page
+		while page <= last_page:
+			page_url = url + f'&page={page}'
+			page_soup = fetch(page_url)
+			article_links = get_by_day_article_links(url, page_soup)
+			
+			data = process_url(article_links)
 			dumps.append(data)
-
-		print(dumps)
-		# json.dumps(data)
-		# page = 2  # start from next page
-		# while page <= last_page:
-		# 	url += f'&page={page}'
-		# 	for link in links:
-		# 		page_last = ''
 		
+		# finish processing; dump
+		filename = url.split('date=')[-1] + '.json'
+		dump_path = os.path.join(DUMP_PATH, filename)
+		dump_json(dump_path, dumps)
