@@ -91,10 +91,10 @@ def dump_json(url, page, data):
 	dump_path = os.path.join(DUMP_PATH, filename)
 
 	with open(f'{dump_path}.json', 'w') as f:
-		json.dump(data, f)
+		json.dump(data, f, indent=4)
 
 def process_url(article_links):
-	data = []
+	dump = []
 
 	for article_link in article_links:
 		logging.info(f"processing {article_link}")
@@ -103,7 +103,9 @@ def process_url(article_links):
 		data = get_article_contents(article_soup)  # process articles
 		data['link'] = article_link
 
-	return data
+		dump.append(data)
+
+	return dump
 
 if __name__ == '__main__':
 	logging.basicConfig(level=logging.DEBUG, filename="tribun-bs4/tribun-bs4.logs", filemode="a+",
