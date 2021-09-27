@@ -4,6 +4,12 @@ Scraping CNN using [Selenium](https://selenium-python.readthedocs.io/) & Tribun 
 
 The [Scrapy](https://docs.scrapy.org/en/latest/index.html) code doesn't work, idk why lol
 
+## Run
+
+- Create a `dump` directory on your root project
+- Run `pip3 install -r requirements.txt`
+- Run `python3 tribun-bs4/scrapers.py`
+
 ## Development
 
 ### On [ipython tab-completion error](https://github.com/ipython/ipython/issues/10946), use
@@ -20,11 +26,12 @@ logging.getLogger('parso').setLevel(logging.WARNING)
 
 [Tribun's index](https://www.tribunnews.com/index-news/news?date=2021-5-1)
 
-### [To get your output, run it like this:](https://stackoverflow.com/a/57054297/8996974)
+### Todos
 
-`scrapy crawl tribun.articles -O tribun_articles.json`
-
-I recommend using -O to overwrite any result from previous run **if the run was stopped** and manually trace and re-run from crawled urls
+1. logs filemode as `w`
+2. install and use tqdm on `while`
+3. use url to dump (not page_url)
+4. change sleep to .5 (so it's faster?)
 
 ## Notes
 
