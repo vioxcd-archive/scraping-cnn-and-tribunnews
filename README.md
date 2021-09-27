@@ -1,6 +1,8 @@
 # Scraping CNN & Tribun
 
-Scraping CNN using [Selenium](https://selenium-python.readthedocs.io/) & Tribun using [Scrapy](https://docs.scrapy.org/en/latest/index.html)
+Scraping CNN using [Selenium](https://selenium-python.readthedocs.io/) & Tribun using [BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
+
+The [Scrapy](https://docs.scrapy.org/en/latest/index.html) code doesn't work, idk why lol
 
 ## Development
 
