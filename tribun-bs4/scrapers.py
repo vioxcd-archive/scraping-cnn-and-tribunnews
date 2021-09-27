@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 import time
 
@@ -48,7 +49,7 @@ def get_article_contents(article_soup):
 	next_page_link, should_go = check_next_page(article_soup)
 
 	if should_go:
-		# print(f'going to {next_page_link}')
+		logging.info(f'going to {next_page_link}')
 		recurse_content(next_page_link, content)
 	
 	return {
@@ -82,7 +83,7 @@ def recurse_content(url, content):  # side effects
 	next_page_link, should_go = check_next_page(soup)
 
 	if should_go:
-		# print(f'going to {next_page_link}')
+		logging.info(f'going to {next_page_link}')
 		recurse_content(next_page_link, content)
 
 def dump_json(dump_path, data):
@@ -93,7 +94,7 @@ def process_url(article_links):
 	data = []
 
 	for article_link in article_links:
-		# print(f"processing {article_link}")
+		logging.info(f"processing {article_link}")
 
 		article_soup = fetch(article_link)
 		data = get_article_contents(article_soup)  # process articles
@@ -102,11 +103,13 @@ def process_url(article_links):
 	return data
 
 if __name__ == '__main__':
+	logging.basicConfig(level=logging.DEBUG, filename="tribun-bs4.logs", filemode="a+",
+                        format="%(asctime)-15s %(levelname)-8s %(message)s")
 	dumps = []
 
 	# for url in URLS:
 	for url in ['https://www.tribunnews.com/index-news/news?date=2021-5-1']:
-		print(f'processing: {url}')
+		logging.info(f'processing: {url}')
 
 		# process initial page
 		index_soup = fetch(url)
@@ -119,9 +122,9 @@ if __name__ == '__main__':
 		# process subsequent pages
 		page = 2  # start from next page
 		while page <= last_page:
-			page_url = url + f'&page={page}'
+			logging.info(f'processing: {page_url}')
 
-			print(f'processing: {page_url}')
+			page_url = url + f'&page={page}'
 			page_soup = fetch(page_url)
 			article_links = get_by_day_article_links(url, page_soup)
 			
