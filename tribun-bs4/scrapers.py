@@ -116,9 +116,22 @@ def process_url(article_links):
 
 	return dump
 
+def load_titles_index(DUMP_FILE='dump-all-titles'):
+	titles_index_path = os.path.join(DUMP_PATH, DUMP_FILE)
+	index = []
+
+	with open(titles_index_path, 'r') as f:
+		for row in f.readlines():
+			index.append(row.strip('\n').strip('"'))
+
+	return index
+
 if __name__ == '__main__':
 	logging.basicConfig(level=logging.DEBUG, filename="tribun-bs4/tribun-bs4.logs", filemode="w",
                         format="%(asctime)-15s %(levelname)-8s %(message)s")
+	
+	index = load_titles_index()
+
 	# for url in URLS:
 	for url in ['https://www.tribunnews.com/index-news/news?date=2021-5-2']:
 		print(f'processing: {url}')
