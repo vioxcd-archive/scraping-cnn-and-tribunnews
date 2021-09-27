@@ -32,6 +32,7 @@ logging.getLogger('parso').setLevel(logging.WARNING)
 2. install and use tqdm on `while`
 3. use url to dump (not page_url)
 4. change sleep to .5 (so it's faster?)
+5. **important**: keep track of the titles that are overlapping between pages (on `&pages=` parameter on Tribun): some 1 May titles are included in 2 May, 2 May in 3 May, and so on. Idea: maybe create a `.csv` for all titles, loaded as `set` and check whether some of these titles are already grabbed (this might make the program runs faster)
 
 ## Notes
 
