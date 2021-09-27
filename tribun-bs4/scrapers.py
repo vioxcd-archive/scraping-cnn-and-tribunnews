@@ -91,7 +91,7 @@ def recurse_content(url, content):  # side effects
 		recurse_content(next_page_link, content)
 
 def dump_json(url, page, data):
-	filename = url.split('date=')[-1] + f'-{page}.json'
+	filename = url.split('date=')[-1] + f'-{page}'
 	dump_path = os.path.join(DUMP_PATH, filename)
 
 	with open(f'{dump_path}.json', 'w') as f:
