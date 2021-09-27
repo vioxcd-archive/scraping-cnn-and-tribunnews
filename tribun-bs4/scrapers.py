@@ -5,6 +5,7 @@ import time
 
 import requests
 from bs4 import BeautifulSoup
+from tqdm import tqdm
 
 from urls import get_urls
 
@@ -13,7 +14,7 @@ URLS = get_urls()
 
 def fetch(url):
 	page = requests.get(url)
-	time.sleep(2)
+	time.sleep(.5)
 
 	if page.status_code == 404:
 		raise requests.HTTPError
@@ -116,35 +117,33 @@ def process_url(article_links):
 	return dump
 
 if __name__ == '__main__':
-	logging.basicConfig(level=logging.DEBUG, filename="tribun-bs4/tribun-bs4.logs", filemode="a+",
+	logging.basicConfig(level=logging.DEBUG, filename="tribun-bs4/tribun-bs4.logs", filemode="w",
                         format="%(asctime)-15s %(levelname)-8s %(message)s")
 	# for url in URLS:
-	for url in ['https://www.tribunnews.com/index-news/news?date=2021-5-1']:
-		# logging.info(f'processing: {url}')
+	for url in ['https://www.tribunnews.com/index-news/news?date=2021-5-2']:
+		print(f'processing: {url}')
 
 		# process initial page
 		index_soup = fetch(url)
 		last_page = get_last_page(index_soup)  # OFFSET
 
-		"""
 		article_links = get_by_day_article_links(url, index_soup)
 
 		data = process_url(article_links)
 		dump_json(url, 1, data)
-		"""
 
 		# process subsequent pages
-		# page = 2  # start from next page
-		page = 3
-		while page <= last_page:
-			page_url = url + f'&page={page}'
+		page = 2  # start from next page
+		with tqdm(total=last_page) as pbar:  # https://stackoverflow.com/a/45808255/8996974
+			while page <= last_page:
+				page_url = url + f'&page={page}'
 
-			# logging.info(f'processing: {page_url}')
-			page_soup = fetch(page_url)
-			article_links = get_by_day_article_links(url, page_soup)
-			
-			data = process_url(article_links)
-			dump_json(page_url, page, data)
+				# logging.info(f'processing: {page_url}')
+				page_soup = fetch(page_url)
+				article_links = get_by_day_article_links(url, page_soup)
+				
+				data = process_url(article_links)
+				dump_json(url, page, data)
 
-			page += 1
-		
+				page += 1
+				pbar.update(1)

@@ -43,6 +43,7 @@ selenium==3.141.0
 service-identity==21.1.0
 six==1.16.0
 soupsieve==2.2.1
+tqdm==4.62.3
 traitlets==5.1.0
 Twisted==21.7.0
 typing-extensions==3.10.0.2
