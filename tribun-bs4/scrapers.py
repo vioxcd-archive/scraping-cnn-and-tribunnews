@@ -116,31 +116,35 @@ def process_url(article_links):
 
 	return dump
 
-def load_titles_index(DUMP_FILE='dump-all-titles'):
+def load_links_index(DUMP_FILE='dump-all-links'):
 	titles_index_path = os.path.join(DUMP_PATH, DUMP_FILE)
-	index = []
+	index = set()
 
 	with open(titles_index_path, 'r') as f:
 		for row in f.readlines():
-			index.append(row.strip('\n').strip('"'))
+			index.add(row.strip('\n').strip('"'))
 
 	return index
+
+def check_in_index(article_links, links_index):
+	not_in_index = list(filter(lambda link: link not in links_index, article_links))
+	links_index.update(not_in_index)  # SIDE EFFECT
+	return not_in_index
 
 if __name__ == '__main__':
 	logging.basicConfig(level=logging.DEBUG, filename="tribun-bs4/tribun-bs4.logs", filemode="w",
                         format="%(asctime)-15s %(levelname)-8s %(message)s")
 	
-	index = load_titles_index()
+	links_index = load_links_index()
 
 	# for url in URLS:
 	for url in ['https://www.tribunnews.com/index-news/news?date=2021-5-2']:
-		print(f'processing: {url}')
-
 		# process initial page
 		index_soup = fetch(url)
 		last_page = get_last_page(index_soup)  # OFFSET
 
 		article_links = get_by_day_article_links(url, index_soup)
+		article_links = check_in_index(article_links, links_index)
 
 		data = process_url(article_links)
 		dump_json(url, 1, data)
@@ -150,10 +154,11 @@ if __name__ == '__main__':
 		with tqdm(total=last_page) as pbar:  # https://stackoverflow.com/a/45808255/8996974
 			while page <= last_page:
 				page_url = url + f'&page={page}'
-
-				# logging.info(f'processing: {page_url}')
+				print(f'processing: {page_url}')
 				page_soup = fetch(page_url)
+
 				article_links = get_by_day_article_links(url, page_soup)
+				article_links = check_in_index(article_links, links_index)
 				
 				data = process_url(article_links)
 				dump_json(url, page, data)
