@@ -119,9 +119,9 @@ if __name__ == '__main__':
 		# process subsequent pages
 		page = 2  # start from next page
 		while page <= last_page:
-			print(f'processing: {page_url}')
-
 			page_url = url + f'&page={page}'
+
+			print(f'processing: {page_url}')
 			page_soup = fetch(page_url)
 			article_links = get_by_day_article_links(url, page_soup)
 			
