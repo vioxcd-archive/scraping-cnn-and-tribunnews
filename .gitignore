@@ -1,6 +1,7 @@
 dump/
 
 *__pycache__*
+*.log
 *.logs
 *.json
 tribun-*.txt
