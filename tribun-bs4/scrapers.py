@@ -121,7 +121,7 @@ def load_links_index(DUMP_FILE='dump-all-links'):
 
 	with open(titles_index_path, 'r') as f:
 		index = f.readlines()
-		index = set(map(lambda x: x.strip('\n')))
+		index = set(map(lambda x: x.strip('\n'), index))
 
 	return index
 
@@ -143,7 +143,7 @@ if __name__ == '__main__':
 	links_index = load_links_index()
 
 	# for url in URLS:
-	for url in ['https://www.tribunnews.com/index-news/news?date=2021-5-2']:
+	for url in ['https://www.tribunnews.com/index-news/news?date=2021-5-3']:
 		# process initial page
 		index_soup = fetch(url)
 		last_page = get_last_page(index_soup)  # OFFSET
