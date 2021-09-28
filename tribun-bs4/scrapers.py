@@ -9,7 +9,8 @@ from tqdm import tqdm
 
 from urls import get_urls
 
-DUMP_PATH = f'{os.getcwd()}/dump'
+DUMP_PATH = f'{os.getcwd()}/dump/tribun'
+LINKS_INDEX_PATH = f'{os.getcwd()}/dump'
 URLS = get_urls()
 
 def fetch(url):
@@ -117,7 +118,7 @@ def process_url(article_links):
 	return dump
 
 def load_links_index(DUMP_FILE='dump-all-links'):
-	titles_index_path = os.path.join(DUMP_PATH, DUMP_FILE)
+	titles_index_path = os.path.join(LINKS_INDEX_PATH, DUMP_FILE)
 
 	with open(titles_index_path, 'r') as f:
 		index = f.readlines()
@@ -126,7 +127,7 @@ def load_links_index(DUMP_FILE='dump-all-links'):
 	return index
 
 def dump_links_index(index, DUMP_FILE='dump-all-links'):
-	titles_index_path = os.path.join(DUMP_PATH, DUMP_FILE)
+	titles_index_path = os.path.join(LINKS_INDEX_PATH, DUMP_FILE)
 	
 	with open(titles_index_path, 'w') as f:
 		f.writelines('\n'.join(index))
