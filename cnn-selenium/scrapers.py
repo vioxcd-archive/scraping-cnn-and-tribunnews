@@ -18,9 +18,14 @@ print('interacted with monthpicker')
 WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, "//div[@class='datepick-month']/table/tbody//a[text()='1']"))).click()
 print('interacted with daypicker')
 
-driver.implicitly_wait(5)
-articles = driver.find_elements_by_xpath("//a[contains(@href, '20210501')]")
+for _ in range(100):
+	try:
+		driver.implicitly_wait(5)
+		WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.CLASS_NAME, "btn.btn__more"))).click()
+	except:
+		pass
 
+articles = driver.find_elements_by_xpath("//a[contains(@href, '20210501')]")
 for article in articles:
 	print(article.get_attribute('href'))
 
