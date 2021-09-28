@@ -13,7 +13,14 @@ def run_driver(dates):
 	driver = webdriver.Firefox()
 	driver.get(URL)
 
+	# Element obscured; I haven't solved this, but this SO link might help
+	# (maybe next time the error came up)
+	# https://stackoverflow.com/a/49939793
+	driver.implicitly_wait(5)
+
+	# Wait until
 	# https://stackoverflow.com/a/65142989/8996974
+	driver.implicitly_wait(5)
 	WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, "//input[@id='date1']"))).click()
 	WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, f"//div[@class='datepick-month-header']/select[@title='Change the month']/option[@value='{month}/2021']"))).click()
 	WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, f"//div[@class='datepick-month']/table/tbody//a[text()='{day}']"))).click()
