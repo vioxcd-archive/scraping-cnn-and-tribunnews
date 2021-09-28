@@ -166,7 +166,9 @@ if __name__ == '__main__':
 				article_links = check_in_index(article_links, links_index)
 				
 				data = process_url(article_links)
-				dump_json(url, page, data)
+
+				if len(data) > 0:
+					dump_json(url, page, data)
 
 				page += 1
 				pbar.update(1)
