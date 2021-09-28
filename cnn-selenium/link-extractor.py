@@ -7,7 +7,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from dates_parameter import return_date_params
 
-DUMP_PATH = 'dump/cnn'
+DUMP_PATH = 'dump/cnn/link'
 
 def dump_links(article_links, date_params, dump_path=DUMP_PATH):
 	dump_file = os.path.join(DUMP_PATH, date_params)
