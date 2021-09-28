@@ -5,6 +5,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
+from dates_parameter import return_date_params
+
 DUMP_PATH = 'dump/cnn'
 
 def dump_links(article_links, date_params, dump_path=DUMP_PATH):
@@ -51,5 +53,13 @@ def run_driver(dates):
 	driver.close()
 
 if __name__ == '__main__':
-	run_driver('05/02')
+	"""
+	date_params = return_date_params()
+
+	for date_param in date_params:
+		run_driver(date_param)
+		print(f'Done processing {date_param}')
+	"""
+
+	run_driver('05/03')
 	print('Done')
