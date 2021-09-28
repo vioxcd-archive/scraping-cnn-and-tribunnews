@@ -118,13 +118,18 @@ def process_url(article_links):
 
 def load_links_index(DUMP_FILE='dump-all-links'):
 	titles_index_path = os.path.join(DUMP_PATH, DUMP_FILE)
-	index = set()
 
 	with open(titles_index_path, 'r') as f:
-		for row in f.readlines():
-			index.add(row.strip('\n').strip('"'))
+		index = f.readlines()
+		index = set(map(lambda x: x.strip('\n')))
 
 	return index
+
+def dump_links_index(index, DUMP_FILE='dump-all-links'):
+	titles_index_path = os.path.join(DUMP_PATH, DUMP_FILE)
+	
+	with open(titles_index_path, 'w') as f:
+		f.writelines('\n'.join(index))
 
 def check_in_index(article_links, links_index):
 	not_in_index = list(filter(lambda link: link not in links_index, article_links))
@@ -165,3 +170,8 @@ if __name__ == '__main__':
 
 				page += 1
 				pbar.update(1)
+
+	# update index
+	dump_links_index(links_index)
+
+	print('Done!')
