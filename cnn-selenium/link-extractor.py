@@ -1,8 +1,17 @@
+import os
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
+DUMP_PATH = 'dump/cnn'
+
+def dump_links(article_links, date_params, dump_path=DUMP_PATH):
+	dump_file = os.path.join(DUMP_PATH, date_params)
+
+	with open(f'{dump_file}.link', 'w') as f:
+		f.writelines('\n'.join(article_links))
 
 def run_driver(dates):
 	month = int(dates.split('/')[0])
@@ -20,7 +29,6 @@ def run_driver(dates):
 
 	# Wait until
 	# https://stackoverflow.com/a/65142989/8996974
-	driver.implicitly_wait(5)
 	WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, "//input[@id='date1']"))).click()
 	WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, f"//div[@class='datepick-month-header']/select[@title='Change the month']/option[@value='{month}/2021']"))).click()
 	WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, f"//div[@class='datepick-month']/table/tbody//a[text()='{day}']"))).click()
@@ -36,10 +44,12 @@ def run_driver(dates):
 		WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.CLASS_NAME, "btn.btn__more"))).click()
 
 	articles = driver.find_elements_by_xpath(f"//a[contains(@href, {date_params})]")
-	for article in articles:
-		print(article.get_attribute('href'))
+	article_links = [article.get_attribute('href') for article in articles]
+	
+	dump_links(article_links, date_params)
 
 	driver.close()
 
 if __name__ == '__main__':
-	run_driver('05/01')
+	run_driver('05/02')
+	print('Done')
