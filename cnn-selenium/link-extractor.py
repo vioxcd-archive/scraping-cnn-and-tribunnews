@@ -1,4 +1,5 @@
 import os
+import time
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -59,6 +60,7 @@ if __name__ == '__main__':
 	for date_param in date_params:
 		run_driver(date_param)
 		print(f'Done processing {date_param}')
+		time.sleep(3)
 	"""
 
 	run_driver('05/03')
