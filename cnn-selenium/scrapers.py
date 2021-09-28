@@ -3,30 +3,36 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
-URL = 'https://www.cnnindonesia.com/indeks'
 
-driver = webdriver.Firefox()
-driver.get(URL)
+def run_driver(dates):
+	month = int(dates.split('/')[0])
+	day = int(dates.split('/')[1])
+	date_params = f'2021{dates}'.replace('/', '')
 
-# https://stackoverflow.com/a/65142989/8996974
-WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, "//input[@id='date1']"))).click()
-print('interacted with datepicker')
+	URL = 'https://www.cnnindonesia.com/indeks'
+	driver = webdriver.Firefox()
+	driver.get(URL)
 
-WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, "//div[@class='datepick-month-header']/select[@title='Change the month']/option[@value='5/2021']"))).click()
-print('interacted with monthpicker')
+	# https://stackoverflow.com/a/65142989/8996974
+	WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, "//input[@id='date1']"))).click()
+	WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, f"//div[@class='datepick-month-header']/select[@title='Change the month']/option[@value='{month}/2021']"))).click()
+	WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, f"//div[@class='datepick-month']/table/tbody//a[text()='{day}']"))).click()
 
-WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, "//div[@class='datepick-month']/table/tbody//a[text()='1']"))).click()
-print('interacted with daypicker')
-
-for _ in range(100):
-	try:
+	for _ in range(100):  # while True, actually (assume: page won't reach 100)
 		driver.implicitly_wait(5)
+
+		try:
+			next_button = driver.find_element_by_class_name('btn.btn__more')
+		except:
+			break
+		
 		WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.CLASS_NAME, "btn.btn__more"))).click()
-	except:
-		pass
 
-articles = driver.find_elements_by_xpath("//a[contains(@href, '20210501')]")
-for article in articles:
-	print(article.get_attribute('href'))
+	articles = driver.find_elements_by_xpath(f"//a[contains(@href, {date_params})]")
+	for article in articles:
+		print(article.get_attribute('href'))
 
-driver.close()
+	driver.close()
+
+if __name__ == '__main__':
+	run_driver('05/01')
