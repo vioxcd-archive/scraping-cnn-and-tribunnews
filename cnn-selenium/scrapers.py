@@ -97,3 +97,5 @@ if __name__ == '__main__':
 
 		filename = file_.split('/')[-1].split('.')[0]  # [root, link folder, (filename, .link format)]
 		dump(filename, data)
+
+		time.sleep(3)
