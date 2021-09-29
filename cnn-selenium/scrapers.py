@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 import time
 
@@ -67,17 +68,23 @@ def dump(filename, data, root=CNN_ROOT):
 	print(f'Dumped {dump_path}')
 
 if __name__ == '__main__':
+	logging.basicConfig(level=logging.INFO, filename="cnn-selenium/page-process.logs", filemode="w",
+                    format="%(asctime)-15s %(levelname)-8s %(message)s")
+
 	# files = load_files()
 	files = [
-		f'{CNN_ROOT}/link/20210501.link'
+		f'{CNN_ROOT}/link/20210502.link'
 	]
 
 	for file_ in files:
+		logging.info(f'Processing {file_}')
+
 		links = load_links(file_)
 		data = []
 
-		for link in links:
-			print(f'Processing {link}')
+		for link in tqdm(links):
+			logging.info(f'Processing {link}')
+			
 			soup = fetch(link)
 
 			"""Content error comes from page where the content is not text, but videos or photos"""
@@ -86,7 +93,7 @@ if __name__ == '__main__':
 				page_data['link'] = link
 				data.append(page_data)
 			except Exception as e:
-				print(f'Error found: {e}')
+				logging.error(f'Error found: {e}')
 
 		filename = file_.split('/')[-1].split('.')[0]  # [root, link folder, (filename, .link format)]
 		dump(filename, data)
