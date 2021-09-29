@@ -53,7 +53,7 @@ def process_page(soup):
 	return {
 		'title': title,
 		'date': date,
-		'ps': ps,
+		'content': ps,
 		'related_topic': related_topic,
 	}
 
