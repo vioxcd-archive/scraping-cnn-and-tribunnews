@@ -77,10 +77,16 @@ if __name__ == '__main__':
 		data = []
 
 		for link in links:
+			print(f'Processing {link}')
 			soup = fetch(link)
-			page_data = process_page(soup)
-			page_data['link'] = link
-			data.append(page_data)
 
-		filename = file_.split('.')[0]  # [name, format]
+			"""Content error comes from page where the content is not text, but videos or photos"""
+			try:
+				page_data = process_page(soup)
+				page_data['link'] = link
+				data.append(page_data)
+			except Exception as e:
+				print(f'Error found: {e}')
+
+		filename = file_.split('/')[-1].split('.')[0]  # [root, link folder, (filename, .link format)]
 		dump(filename, data)
