@@ -3,6 +3,7 @@ import time
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
@@ -22,7 +23,11 @@ def run_driver(dates):
 	date_params = f'2021{dates}'.replace('/', '')
 
 	URL = 'https://www.cnnindonesia.com/indeks'
-	driver = webdriver.Firefox()
+
+	# https://stackoverflow.com/a/55834112/8996974
+	options = FirefoxOptions()
+	options.add_argument("--headless")
+	driver = webdriver.Firefox(options=options)
 	driver.get(URL)
 
 	# Element obscured; I haven't solved this, but this SO link might help
