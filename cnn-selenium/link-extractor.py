@@ -6,6 +6,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
+from tqdm import tqdm
 
 from dates_parameter import return_date_params
 
@@ -13,6 +14,8 @@ DUMP_PATH = 'dump/cnn/link'
 
 def dump_links(article_links, date_params, dump_path=DUMP_PATH):
 	dump_file = os.path.join(DUMP_PATH, date_params)
+
+	print(f'Dumping {len(article_links)} articles')
 
 	with open(f'{dump_file}.link', 'w') as f:
 		f.writelines('\n'.join(article_links))
@@ -59,14 +62,14 @@ def run_driver(dates):
 	driver.close()
 
 if __name__ == '__main__':
-	"""
 	date_params = return_date_params()
 
-	for date_param in date_params:
+	for date_param in tqdm(date_params):
+		print(f'Processing {date_param}')
 		run_driver(date_param)
-		print(f'Done processing {date_param}')
 		time.sleep(3)
-	"""
 
+	"""
 	run_driver('05/03')
 	print('Done')
+	"""
